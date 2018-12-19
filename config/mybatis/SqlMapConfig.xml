@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<!--全局  -->
+
+
+	<!--使用别名typeAliases  -->
+	<typeAliases>
+	<!--批量扫描别名  -->
+		<package name="cn.jx.pxc.ssm.po"/>
+	</typeAliases>
+	
+    <!--注入映射文件mappers   -->
+   <!--  <mappers>
+    	<mapper resource="sqlmapper/UserMapper.xml"/>使用原始dao 
+    	<package name="cn.jx.pxc.ssm.mapper"/>直接导入mapper包下的所有mapper.xml 
+    </mappers> -->
+</configuration>

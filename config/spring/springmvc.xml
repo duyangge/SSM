@@ -1,0 +1,63 @@
+<beans   xmlns="http://www.springframework.org/schema/beans"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop" 
+    xmlns:tx="http://www.springframework.org/schema/tx" 
+    xmlns:context="http://www.springframework.org/schema/context" 
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx 
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+
+	<!-- 可以扫描controller,service,...这里让扫描controller,指定controller的包 -->
+	<context:component-scan base-package="cn.jx.pxc.ssm.controller"/>
+	
+	
+	<!--多个映射器可以共存  -->
+		
+	<!--使用mvc:annotation-driven代替上边的注解映射器和适配器 配置
+		mvc:annotation-driven:默认加载很多的参数绑定方法
+		比如json转换解析器就默认加载了，如果使用mvc:annotation-driven不用配置上边的RequestMappingHandlerMapping和RequestMappingHandlerAdapter
+		实际开发时，使用mvc:annotation-driven最多。
+	 -->
+	 <!--注解映射器和适配器 配置 
+	 	conversion-service:可以配置自定义参数绑定（日期类型）
+	 	自定义参数绑定：1.mvc:annotation-driven注入
+	 	            2.编写bean（conversionService）
+	 	            3.编写转换器中自定义类
+	  -->
+	<mvc:annotation-driven conversion-service="conversionService"></mvc:annotation-driven>
+	
+	
+	<!--conversionService:自定义参数绑定  -->
+	<bean id="conversionService" class=" org.springframework.context.support.ConversionServiceFactoryBean">
+	
+		<!-- 转换器 -->
+		<property name="converters">
+			<list>
+				<bean class="cn.jx.pxc.ssm.controller.converter.CustomDateConverter"></bean>
+			
+			</list>
+		
+		</property>
+	
+	</bean>
+	
+	<!--配置视图解析器 解析jsp解析，默认使用jstl标签，classpath下得有jstl的jar.-->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!--默认加载jstl classpath下必须要jstl的jar,可以不用写 -->
+		<!-- <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/> -->
+		<!--配置jsp的前缀  -->
+		<property name="prefix" value="/WEB-INF/jsp/"/>
+		<!--配置jsp的后缀  -->
+		<property name="suffix" value=".jsp"/>
+	</bean>
+	
+</beans>
