@@ -38,9 +38,24 @@ public interface ItemsService {
 	/**
 	 * 通过id，修改商品信息
 	 * @param id 修改的id
-	 * @param itemsCustom
+	 * @param itemsCustom items的扩展类
 	 * @throws Exception
 	 */
 	void updateItems(Integer id,ItemsCustom itemsCustom) throws Exception;
+	
+	
+	/**
+	 * 根据商品id，删除商品
+	 * @param itemsQueryVo items的包装类
+	 * @throws Exception
+	 */
+	void deleteItemsById(ItemsQueryVo itemsQueryVo) throws Exception;
+	
+	
+	/**添加商品
+	 * @param itemsQueryVo items的包装类
+	 * @throws Exception
+	 */
+	void addItems(ItemsQueryVo itemsQueryVo ) throws Exception;
 
 }

@@ -7,43 +7,47 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>修改商品信息</title>
-
 </head>
 <body> 
 <span>${ msg }</span>
+	<%-- <c:if test="${allErrors != null }"></c:if> --%>
 	<!-- 上传图片是需要指定属性 enctype="multipart/form-data" -->
 	<!-- <form id="itemForm" action="" method="post" enctype="multipart/form-data"> -->
-	<form id="itemForm"	action="${pageContext.request.contextPath }/items/updateItemsSubmit.action" method="post">
-		<input type="hidden" name="id" value="${itemsCustom.id }" /> 修改商品信息：
+	<c:forEach items="${allErrors}"  var="error">
+		<font color="red">${error.getDefaultMessage()}</font>
+	</c:forEach>
+	<!--enctype="multipart/form-data":添加文件上传属性  -->
+	<form id="itemForm"	enctype="multipart/form-data" action="${pageContext.request.contextPath }/items/updateItemsSubmit.action" method="post">
+		<input type="hidden" name="id" value="${items.id }" /> 修改商品信息：
 		<table width="100%" border=1>
 			<tr>
 				<td>商品名称</td>
-				<td><input type="text" name="name" value="${itemsCustom.name }" /></td>
+				<td><input type="text" name="name" value="${items.name }" /></td>
 			</tr>
 			<tr>
 				<td>商品价格</td>
-				<td><input type="text" name="price" value="${itemsCustom.price }" /></td>
+				<td><input type="text" name="price" value="${items.price }" /></td>
 			</tr>
 			
 			<tr>
 				<td>商品生产日期</td>
 				<td><input type="text" name="createtime"
-					value="<fmt:formatDate value="${itemsCustom.createtime}" pattern="yyyy-MM-dd HH:mm:ss"/>" /></td>
+					value="<fmt:formatDate value="${items.createtime}" pattern="yyyy-MM-dd HH:mm:ss"/>" /></td>
 			</tr>
 			<tr>
 				<td>商品图片</td>
 				<td>
-					<c:if test="${itemsCustom.pic !=null}">
-						<img src="/pic/${itemsCustom.pic}" width="100" height="100"/>
+					<c:if test="${items.pic !=null}">
+						<img src="/pic/${items.pic}" width="100" height="100"/>
 						<br/>
 					</c:if>
-					<input type="file"  name="pictureFile"/> 
+					<input type="file"  name="items_pic"/> 
 				</td>
 			</tr>
 			
 			<tr>
 				<td>商品简介</td>
-				<td><textarea rows="3" cols="30" name="detail">${itemsCustom.detail }</textarea>
+				<td><textarea rows="3" cols="30" name="detail">${items.detail }</textarea>
 				</td>
 			</tr>
 			<tr>

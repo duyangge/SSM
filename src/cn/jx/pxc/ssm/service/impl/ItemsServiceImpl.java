@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import cn.jx.pxc.exception.CustomException;
 import cn.jx.pxc.ssm.mapper.ItemsCustomMapper;
 import cn.jx.pxc.ssm.mapper.ItemsMapper;
 import cn.jx.pxc.ssm.po.Items;
@@ -45,8 +46,13 @@ public class ItemsServiceImpl implements ItemsService {
 	 * @see cn.jx.pxc.ssm.service.ItemsService#findItemsById(java.lang.Integer)
 	 */
 	@Override
-	public ItemsCustom findItemsById(Integer id) {
+	public ItemsCustom findItemsById(Integer id) throws Exception{
 		Items items = itemsMapper.selectByPrimaryKey(id);
+		
+		if(items == null) {
+			throw new CustomException("修改的商品不能不空");
+		}
+		
 		//中间对商品信息进行业务处理
 		//....
 		//返回ItemsCustom
@@ -68,7 +74,23 @@ public class ItemsServiceImpl implements ItemsService {
 		//更新商品信息使用updateByPrimaryKeyWithBLOBs根据id更新items表中所有字段，包括大文本字段
 		//updateByPrimaryKeyWithBLOBs,要求必须传入id
 		itemsCustom.setId(id);
-		itemsMapper.updateByPrimaryKeyWithBLOBs(itemsCustom);
+		itemsMapper.updateByPrimaryKeyWithBLOBs(itemsCustom);//子类也可以直接使用父类的方法，相同属性可以。
+	}
+
+	/* (non-Javadoc)
+	 * @see cn.jx.pxc.ssm.service.ItemsService#deleteItemsById(cn.jx.pxc.ssm.po.ItemsQueryVo)
+	 */
+	@Override
+	public void deleteItemsById(ItemsQueryVo itemsQueryVo) throws Exception {
+		itemsCustomMapper.deleteItemsById(itemsQueryVo);
+	}
+
+	/* (non-Javadoc)
+	 * @see cn.jx.pxc.ssm.service.ItemsService#addItems(cn.jx.pxc.ssm.po.ItemsQueryVo)
+	 */
+	@Override
+	public void addItems(ItemsQueryVo itemsQueryVo) throws Exception {
+		itemsCustomMapper.addItems(itemsQueryVo);
 	}
 
 }

@@ -11,11 +11,11 @@ import org.springframework.core.convert.converter.Converter;
 
 /**
  *<p> Title:  CustomDateConverter.java</p>
- *<p> Description:  描述</p>
+ *<p> Description:  日期格式转换器</p>
  * @package   cn.jx.pxc.ssm.controller.converter
  * @author    黄信胜
  * @date      2018年12月19日下午8:46:59
- * @version 版本号
+ * @version 1.0
  */
 @SuppressWarnings("all")
 public class CustomDateConverter implements Converter<String,Date>{

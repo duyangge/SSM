@@ -7,38 +7,93 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>查询商品列表</title>
+<style>
+	td,input,select{
+		font-size:18px;
+	}
+	span{
+	font-size:23px;
+	font-weight:bold;
+	}
+</style>
+<script type="text/javascript">
+	function queryItems(){
+		document.formItems.action="${pageContext.request.contextPath }/items/queryItems.action"
+		document.formItems.submit();
+	}
+	
+	function deleteItems(){
+		document.formItems.action="${pageContext.request.contextPath }/items/deleteItems.action"
+		document.formItems.submit();
+	}
+	
+	function editItemsAll(){
+		document.formItems.action="${pageContext.request.contextPath }/items/editItemsAll.action"
+		document.formItems.submit();
+	}
+	function addItems(){
+		document.formItems.action="${pageContext.request.contextPath }/items/addItems.action"
+		document.formItems.submit();
+	}
+
+</script>
 </head>
 <body> 
-<form action="${pageContext.request.contextPath }/queryItem.action" method="post">
-查询条件：
-<table width="100%" border=1>
-<tr>
-<td><input type="submit" value="查询"/></td>
-</tr>
-</table>
-商品列表：
-<table width="100%" border="1" cellpadding="0" >
-<tr>
-	<td>商品名称</td>
-	<td>商品价格</td>
-	<td>生产日期</td>
-	<td>商品描述</td>
-	<td>操作</td>
-</tr>
-<c:forEach items="${itemList }" var="item">
-<tr>
-	<td>${item.name }</td>
-	<td>${item.price }</td>
-	<td><fmt:formatDate value="${item.createtime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
-	<td>${item.detail }</td>
+<c:if test="${username != null }">
+	当前用户：<font>${username }</font>
+	<a href="${pageContext.request.contextPath }/loginOut.action">退出</a>
+</c:if>
+
+<c:if test="${username == null }">
+	<a href="${pageContext.request.contextPath }/loginIn.action">登陆</a>
+
+</c:if>
+	<form name="formItems" action="${pageContext.request.contextPath }/items/queryItems.action" method="post">
 	
-	<td><a href="${pageContext.request.contextPath }/items/editItems.action?id=${item.id}">修改</a></td>
-
-</tr>
-</c:forEach>
-
-</table>
-</form>
+		<table width="100%" border="0" cellpadding="0" cellspacing="0">
+			<tr>
+				<td>查询条件：<input type="text" name="itemsCustom.name" style="width:250px;height:20px;"/></td>
+				<td>商品类型：<select name="itemsTypes" title="类型" >
+								<c:forEach items="${itemsTypes}" var="itemsType">
+									<option value="${itemsType.key}">${itemsType.value}</option>
+								</c:forEach>
+							</select>
+				</td>
+				<td><input type="button" value="查询" onclick="queryItems()"/></td>
+				<td><input type="button" value="批量删除" onclick="deleteItems()"/></td>
+				<td><input type="button" value="批量修改" onclick="editItemsAll()"/></td>
+				<td><input type="button" value="添加商品" onclick="addItems()"/></td>
+			</tr>
+		</table>
+		<span>商品列表：</span>
+		<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border-buttom:0">
+			<tr>
+				<td><span>选择</span></td>
+				<td><span>商品名称</span></td>
+				<td><span>商品价格</span></td>
+				<td><span>生产日期</span></td>
+				<td><span>商品描述</span></td>
+				<td><span>操作</span></td>
+			</tr>
+			<c:forEach items="${itemList}" var="items">
+			<tr style="height:120px;">
+				<td><input type="checkbox" name="items_id" value="${items.id}"/></td>
+				<td>
+					<font>${items.name}</font>
+					<br/>
+					<c:if test="${items.pic != null}">
+						<img src="/pic/${items.pic}" width="140" height="100"/>
+					</c:if>
+				</td>
+				<td>${items.price}</td>
+				<td><fmt:formatDate value="${items.createtime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+				<td>${items.detail}</td>
+				<td><a href="${pageContext.request.contextPath}/items/editItems.action?id=${items.id}">修改</a></td>
+			
+			</tr>
+			</c:forEach>
+		</table>
+	</form>
 </body>
 
 </html>

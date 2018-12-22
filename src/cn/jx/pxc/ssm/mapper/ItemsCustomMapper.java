@@ -27,4 +27,25 @@ public interface ItemsCustomMapper {
 	 */
 	List<ItemsCustom> findItemsList(ItemsQueryVo itemsQueryVo) throws Exception;
 	
+	/**根据商品id删除商品
+	 * @param itemsQueryVo 包装了商品id的集合
+	 * @throws Exception
+	 */
+	void  deleteItemsById(ItemsQueryVo itemsQueryVo) throws Exception;
+	
+	
+	/**
+	 * 修改商品信息
+	 * @param itemsQueryVo
+	 * @throws Exception
+	 */
+	/*void updateItems(ItemsQueryVo itemsQueryVo) throws Exception;*/
+	
+	/**
+	 * 添加商品信息
+	 * @param itemsQueryVo
+	 * @throws Exception
+	 */
+	void addItems(ItemsQueryVo itemsQueryVo) throws Exception;
+	
 }

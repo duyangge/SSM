@@ -1,21 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.jx.pxc.ssm.mapper.ItemsCustomMapper">
+	<!--
+		数据库模糊查询的4中用法
+		1. -，表示任意单个字符
+		2. [],表示括号内所列字符中的一个（类似玉正则表达式）
+		3. [^],表示不在括号所列之内的单个字符。
+		4. %，表示0或多个字符。
+	  name like '%mar%'换成instr(name,'mar')>0
 	
-	<sql id="query_items">
+	  -->
+	  
+	<sql id="query_items"><!--查询片段  -->
 		<if test="itemsCustom != null">
 			<if test="itemsCustom.name != null and itemsCustom.name != ''">
-				 items.name like '%${itemsCustom.name}%'
+				 instr(items.name,'${itemsCustom.name}')>0
+			</if>
+			<if test="items_id != null and items_id != ''">
+				 <foreach collection="items_id" item="id" open="and (" close=")" separator="or">
+						items.id=${id}
+				</foreach>
 			</if>
 		</if>
 	</sql>
-
+	
+	<sql id="delete_items"><!--删除片段  -->
+		<foreach collection="items_id" item="id" open="and (" close=")" separator="or">
+			items.id=${id}
+		
+		</foreach>
+	</sql>
+	
+	
+	<!--根据商品名称查询商品  -->
 	<select id="findItemsList" resultType="cn.jx.pxc.ssm.po.ItemsCustom" parameterType="cn.jx.pxc.ssm.po.ItemsQueryVo">
 		select *  from items
 	<where>
 		<include refid="query_items"/>
 	</where>
-	
 	</select>
-
+	
+	<!--根据商品id删除商品  -->
+	<delete id="deleteItemsById" parameterType="cn.jx.pxc.ssm.po.ItemsQueryVo">
+		delete from items 
+		<where><!-- 自动去掉第一个and -->
+			<include refid="delete_items"/>
+		</where>
+	</delete>
+	
+	<insert id="addItems" parameterType="cn.jx.pxc.ssm.po.ItemsQueryVo">
+		insert ignore into items(items.name,items.price,items.createtime,items.detail) value(itemsCustom.name,itemsCustom.price, itemsCustom.createtime,itemsCustom.detail)
+	</insert>
+	
+	
 </mapper>
