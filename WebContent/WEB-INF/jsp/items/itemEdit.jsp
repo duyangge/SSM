@@ -19,7 +19,7 @@
 	<!--enctype="multipart/form-data":添加文件上传属性  -->
 	<form id="itemForm"	enctype="multipart/form-data" action="${pageContext.request.contextPath }/items/updateItemsSubmit.action" method="post">
 		<input type="hidden" name="id" value="${items.id }" /> 修改商品信息：
-		<table width="100%" border=1>
+		<table width="100%" border="0">
 			<tr>
 				<td>商品名称</td>
 				<td><input type="text" name="name" value="${items.name }" /></td>

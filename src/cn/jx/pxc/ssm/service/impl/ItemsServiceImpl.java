@@ -85,12 +85,13 @@ public class ItemsServiceImpl implements ItemsService {
 		itemsCustomMapper.deleteItemsById(itemsQueryVo);
 	}
 
+
 	/* (non-Javadoc)
-	 * @see cn.jx.pxc.ssm.service.ItemsService#addItems(cn.jx.pxc.ssm.po.ItemsQueryVo)
+	 * @see cn.jx.pxc.ssm.service.ItemsService#addItems(cn.jx.pxc.ssm.po.ItemsCustom)
 	 */
 	@Override
-	public void addItems(ItemsQueryVo itemsQueryVo) throws Exception {
-		itemsCustomMapper.addItems(itemsQueryVo);
+	public void addItems(ItemsCustom itemsCustom) throws Exception {
+		itemsMapper.insertSelective(itemsCustom);
 	}
 
 }

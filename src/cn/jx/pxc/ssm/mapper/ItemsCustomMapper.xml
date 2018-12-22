@@ -48,9 +48,51 @@
 		</where>
 	</delete>
 	
+	<!-- 添加商品 -->
 	<insert id="addItems" parameterType="cn.jx.pxc.ssm.po.ItemsQueryVo">
-		insert ignore into items(items.name,items.price,items.createtime,items.detail) value(itemsCustom.name,itemsCustom.price, itemsCustom.createtime,itemsCustom.detail)
-	</insert>
+	    insert into items
+	    <trim prefix="(" suffix=")" suffixOverrides=",">
+	      <if test="itemsCustom.id != null">
+	        id,
+	      </if>
+	      <if test="itemsCustom.name != null">
+	        name,
+	      </if>
+	      <if test="itemsCustom.price != null">
+	        price,
+	      </if>
+	      <if test="itemsCustom.pic != null">
+	        pic,
+	      </if>
+	      <if test="itemsCustom.createtime != null">
+	        createtime,
+	      </if>
+	      <if test="itemsCustom.detail != null">
+	        detail,
+	      </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="itemsCustom.id != null">
+	        #{id,jdbcType=INTEGER},
+	      </if>
+	      <if test="itemsCustom.name != null">
+	        #{name,jdbcType=VARCHAR},
+	      </if>
+	      <if test="itemsCustom.price != null">
+	        #{price,jdbcType=DOUBLE},
+	      </if>
+	      <if test="itemsCustom.pic != null">
+	        #{pic,jdbcType=VARCHAR},
+	      </if>
+	      <if test="itemsCustom.createtime != null">
+	        #{createtime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="itemsCustom.detail != null">
+	        #{detail,jdbcType=LONGVARCHAR},
+	      </if>
+	    </trim>
+  </insert>
+	
 	
 	
 </mapper>

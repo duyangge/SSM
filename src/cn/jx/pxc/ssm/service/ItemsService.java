@@ -14,7 +14,7 @@ import cn.jx.pxc.ssm.po.ItemsQueryVo;
  * @package   cn.jx.pxc.ssm.service
  * @author    黄信胜
  * @date      2018年12月19日上午9:15:18
- * @version 版本号
+ * @version 1.0
  */
 public interface ItemsService {
 
@@ -51,11 +51,10 @@ public interface ItemsService {
 	 */
 	void deleteItemsById(ItemsQueryVo itemsQueryVo) throws Exception;
 	
-	
 	/**添加商品
 	 * @param itemsQueryVo items的包装类
 	 * @throws Exception
 	 */
-	void addItems(ItemsQueryVo itemsQueryVo ) throws Exception;
+	void addItems(ItemsCustom itemsCustom ) throws Exception;
 
 }

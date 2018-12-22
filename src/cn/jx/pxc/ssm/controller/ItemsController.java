@@ -2,6 +2,7 @@
 package cn.jx.pxc.ssm.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -107,7 +108,7 @@ public class ItemsController {
 	 */
 	@RequestMapping("/updateItemsSubmit")
 	public String updateItemsSubmit(Model model, Integer id, @ModelAttribute(value="items") @Validated(value= {ValidationNameGroup.class}) ItemsCustom itemsCustom, 
-			BindingResult bindingResult, MultipartFile items_pic ) throws Exception{
+			BindingResult bindingResult, MultipartFile items_pic ) throws Exception {
 
 			List<ObjectError> allErrors ;
 			//获取错误校验信息
@@ -145,16 +146,77 @@ public class ItemsController {
 			//将内存中的数据写入磁盘
 			items_pic.transferTo(newFile);
 			
+			itemsCustom.setPic(newFileName);
+			//将图片名称写入数据库中
+			itemsService.updateItems(id, itemsCustom);
+		}
+		
+		return  "forward:queryItems.action";
+	}
+	
+	/**
+	 * 添加商品
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/addItems")
+	public String addItems() throws Exception {
+		//回到添加商品页面
+		
+		return "items/addItems";
+	}
+	
+	/**
+	 * 添加商品信息
+	 * @param itemsCustom
+	 * @param bindingResult
+	 * @param items_pic
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/addItemsSubmit")
+	public String addItemsSubmit(Model model, @Validated(value= {ValidationNameGroup.class}) ItemsCustom itemsCustom, 
+			BindingResult bindingResult, MultipartFile items_pic ) throws Exception{
+		
+		List<ObjectError> allErrors ;
+		//获取错误校验信息
+		if (bindingResult.hasErrors()) {
+			allErrors = bindingResult.getAllErrors();
+			
+			//将错误信息传递到页面中
+			model.addAttribute("allErrors", allErrors);
+			
+			if(allErrors != null && allErrors.size()>0) 
+				//model.addAttribute("items", "items");//3.直接使用model.addAttribute方法，数据回显
+				return "items/itemEdit";
+		}
+		
+		//存储图片的物理地址
+		String pic_path = "E:\\learnsoftware\\fileUpload\\temp\\";
+		
+		//得到图片的原始name
+		String originalFileName = items_pic.getOriginalFilename();//
+		
+		//上传图片，判断上传的图片不能为空
+		if (items_pic != null && originalFileName != null && originalFileName != "") {
+			
+			//新的图片名称
+			String newFileName = UUID.randomUUID()+originalFileName.substring(originalFileName.lastIndexOf("."));
+			
+			//新图片
+			File newFile = new File(pic_path+newFileName);
+			
+			//将内存中的数据写入磁盘
+			items_pic.transferTo(newFile);
+			
 			itemsCustom.setPic(newFileName);//将图片名称写入数据库中
 		}
-			
-			
 		/*
 		 * 注意:页面中input的name和controller的pojo形参中的属性名称一致，将页面中的数据绑定到pojo
 		 * 自定义参数绑定：1.比如日期类型，转换成和pojo一样类型。
 		 * 2.需要向处理器适配器中注入自定义参数绑定
 		 * */
-		itemsService.updateItems(id, itemsCustom);
+		itemsService.addItems(itemsCustom);
 		
 		//转发商品查询列表	
 		return "forward:queryItems.action" ;
@@ -204,30 +266,37 @@ public class ItemsController {
 	}
 	
 	/**
-	 * 添加商品
+	 * @param bindingResult
+	 * @param items_pic
+	 * @param model
+	 * @param itemsCustom
 	 * @return
-	 * @throws Exception
+	 * @throws IllegalStateException
+	 * @throws IOException
 	 */
-	@RequestMapping("/addItems")
-	public String addItems() throws Exception {
-		//回到添加商品页面
-		
-		return "items/addItems";
+	public Boolean getFileUpLoad(MultipartFile items_pic,ItemsCustom itemsCustom) throws IllegalStateException, IOException {
+
+		//存储图片的物理地址
+		String pic_path = "E:\\learnsoftware\\fileUpload\\temp\\";
+		//得到图片的原始name
+		String originalFileName = items_pic.getOriginalFilename();//
+		//上传图片，判断上传的图片不能为空
+		if (items_pic != null && originalFileName != null && originalFileName != "") {
+			//新的图片名称
+			String newFileName = UUID.randomUUID()+originalFileName.substring(originalFileName.lastIndexOf("."));
+			//新图片
+			File newFile = new File(pic_path+newFileName);
+			//将内存中的数据写入磁盘
+			items_pic.transferTo(newFile);
+			
+			itemsCustom.setPic(newFileName);//将图片名称写入数据库中
+			
+			}
+		return true;
 	}
 	
 	
-	/**
-	 * 提交添加商品，保存
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping("/addItemsSubmit")
-	public String addItemsSubmit(ItemsQueryVo itemsQueryVo) throws Exception {
-		//添加商品的逻辑
-		itemsService.addItems(itemsQueryVo);
-		return "forward:queryItems.action";
-		
-	}
+	
 	//测试
 /*	@RequestMapping("/queryItems")
 	public String queryItems(Model model) throws Exception{
