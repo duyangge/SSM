@@ -41,6 +41,7 @@
         			如果扫描多个包，每个包中间使用半角逗号隔开.
         		-->
         		<property name="basePackage" value="cn.jx.pxc.ssm.mapper"/>
+        		
         		<!--不能直接使用sqlSessionFactory，
         		否则就会使先加载mapper,dataSource中properties后加载  ，导致数据库连接失败
         		-->
